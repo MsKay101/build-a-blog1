@@ -27,11 +27,11 @@ def index():
 @app.route('/single_blog', methods = ['GET'])
 def single_blog():
         blog_id = request.args.get('id') #TODO FIx me?
-        blog = Blog.query.filter_by(id = db.blog).first()
+        blog = Blog.query.filter_by(id = blog_id).first()
         return render_template ("single_blog.html", blog = blog)
 
 
-@app.route('/newpost', methods=['POST' 'GET'])
+@app.route('/newpost', methods=['POST', 'GET'])
 def create_new_post():
     name = ""
     body = ""
@@ -52,7 +52,7 @@ def create_new_post():
             body_error = "Please enter a post!"
 
 
-        if name_error == "" and body_error == "":
+        if name_error and body_error :
             return render_template('newpost.html', title = "Add a new post",
              name_error = name_error, body_error = body_error)
         elif name_error and not body_error:
@@ -66,7 +66,7 @@ def create_new_post():
             db.session.add(newpost)
             db.session.commit()
             
-            return redirect('/single_blog.html?id='+str(newpost.id))
+            return redirect('/single_blog?id='+str(newpost.id))
 
 
 
